@@ -42,7 +42,8 @@ class DiceLearner:
         keys = self.t.keys();
         
         temp = np.random.multinomial(1, values)
-        temp *= range (len(values))
+        temp *= range(len(values))
+
         return keys[sum(temp)]
     
     def expectation(self):
