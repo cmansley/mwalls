@@ -38,6 +38,9 @@ class DiceLearner:
         This should return exactly what was passed in. So, if the
         input is states, then the return values will be states.
         """
+        if self.n == 0:
+            return None
+        
         values = self.t.values();
         keys = self.t.keys();
         
