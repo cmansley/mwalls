@@ -18,7 +18,8 @@ class DynaQ:
         self.beta = 0.5
         self.gamma = 0.9
         self.k = 10
-        self.epsilon = 0.001
+        #self.epsilon = 0.001
+        self.epsilon = 0.0
 
     def _qmax(self,state):
         q =  [ self.Q[(state, action)] for action in range(4) ] 
@@ -26,11 +27,13 @@ class DynaQ:
         maxq = -100
         actions = []
         for i in range(4):
-            if q[i] > maxq:
-                maxq = q[i]
+            # exploration bonus but may not be needed see note in paper
+            tq = q[i] + self.epsilon*math.sqrt(self.n[(state, i)])
+            if tq > maxq:
+                maxq = tq
                 actions = []
                 actions.append(i)
-            elif q[i] == maxq:
+            elif tq == maxq:
                 actions.append(i)
             else:
                 pass
