@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 
 from blocking import BlockingWorld
+from shortcut import ShortcutWorld
 from dyna import DynaQ
 
 # Experimental Framework 
 env = BlockingWorld()
+env = ShortcutWorld()
 alg = DynaQ()
 
 output = []
+
+timesteps = 6000
 
 for j in range(50):
     
@@ -16,7 +20,7 @@ for j in range(50):
 
     output.append([])
 
-    for i in range(3000):
+    for i in range(timesteps):
         
         a = alg.policy(s)
     
@@ -31,7 +35,7 @@ for j in range(50):
         output[j].append(cumrew)
 
 
-for i in range(3000):
+for i in range(timesteps):
     for j in range(50):
         print output[j][i],',',
     print
