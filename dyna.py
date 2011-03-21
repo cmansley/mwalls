@@ -28,7 +28,7 @@ class DynaQ:
         actions = []
         for i in range(4):
             # exploration bonus but may not be needed see note in paper
-            tq = q[i] + self.epsilon*math.sqrt(self.n[(state, i)])
+            tq = q[i]
             if tq > maxq:
                 maxq = tq
                 actions = []
@@ -87,5 +87,6 @@ class DynaQ:
         
     def policy(self, state):
         """Take the maximum Q-valued action given the state"""
+        #+ self.epsilon*math.sqrt(self.n[(state, i)])
         value, action = self._qmax(state)
         return action
