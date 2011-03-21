@@ -6,11 +6,11 @@ from dyna import DynaQ
 
 # Experimental Framework 
 env = BlockingWorld()
-env = ShortcutWorld()
+#env = ShortcutWorld()
 
 output = []
 
-timesteps = 6000
+timesteps = 3000
 
 for j in range(50):
     

@@ -13,13 +13,19 @@ class DynaQ:
         self.Q = collections.defaultdict(int)
         self.T = collections.defaultdict(DiceLearner)
         self.R = collections.defaultdict(DiceLearner)
-        self.n = collections.defaultdict(int)
+        self.n = collections.defaultdict(self.getTime)
+        self.time = 0
         
+        self.states = set()
+
         self.beta = 0.5
         self.gamma = 0.9
         self.k = 10
         #self.epsilon = 0.001
         self.epsilon = 0.0
+
+    def getTime(self):
+        return self.time
 
     def _qmax(self,state):
         q =  [ self.Q[(state, action)] for action in range(4) ] 
@@ -50,8 +56,13 @@ class DynaQ:
 
     def learn(self, state, action, reward, sprime):
         """Add real experience to model, then simulate experience with model"""
+
+        self.time += 1
         
         sa = (state, action)
+
+        # keep track of experienced states
+        self.states.add(state)
 
         # reset/increment exploration bonus count
         self.n[sa] = -1
@@ -68,7 +79,7 @@ class DynaQ:
         # simulated updates to Q "hypothetical experience"
         for i in range(self.k):
             # grab previously experienced state with a randomized action
-            rs, ra = random.choice(self.T.keys())
+            rs = random.choice(list(self.states))
             ra = random.randrange(4)
             rsa = (rs, ra)
 
@@ -78,7 +89,7 @@ class DynaQ:
 
             # default behavior from Suttonq
             if rsp == None or rr == None:
-                rsp = rsa[0]
+                rsp = rs
                 rr = 0
 
             # update evaluation function
