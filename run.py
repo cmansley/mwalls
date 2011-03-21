@@ -14,7 +14,7 @@ for j in range(50):
     
     cumrew = 0.0
     s = env.ss()
-    alg = DynaQ()
+    alg = DynaQ(0.001, 0)
 
     output.append([])
 

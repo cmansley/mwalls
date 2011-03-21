@@ -9,8 +9,8 @@ import numpy
 from dice import DiceLearner
 
 class DynaQ:
-    def __init__(self):
-        self.Q = collections.defaultdict(int)
+    def __init__(self, epsilon, qinit):
+        self.Q = collections.defaultdict(lambda: qinit)
         self.T = collections.defaultdict(DiceLearner)
         self.R = collections.defaultdict(DiceLearner)
         self.n = collections.defaultdict(self.getTime)
@@ -21,8 +21,7 @@ class DynaQ:
         self.beta = 0.5
         self.gamma = 0.9
         self.k = 10
-        #self.epsilon = 0.001
-        self.epsilon = 0.0
+        self.epsilon = epsilon
 
     def getTime(self):
         return self.time
