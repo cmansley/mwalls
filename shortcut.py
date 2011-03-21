@@ -15,6 +15,9 @@ class ShortcutWorld():
     def ss(self):
         return self.start
 
+    def len(self):
+        return 6000
+
     def step(self, state, action, time):
         """Next state """
 

@@ -10,8 +10,6 @@ env = BlockingWorld()
 
 output = []
 
-timesteps = 3000
-
 for j in range(50):
     
     cumrew = 0.0
@@ -20,7 +18,7 @@ for j in range(50):
 
     output.append([])
 
-    for i in range(timesteps):
+    for i in range(env.len()):
         
         a = alg.policy(s)
     
@@ -35,7 +33,7 @@ for j in range(50):
         output[j].append(cumrew)
 
 
-for i in range(timesteps):
+for i in range(env.len()):
     for j in range(50):
         print output[j][i],',',
     print

@@ -15,6 +15,9 @@ class BlockingWorld():
     def ss(self):
         return self.start
 
+    def len(self):
+        return 3000
+
     def step(self, state, action, time):
         """Next state """
 
