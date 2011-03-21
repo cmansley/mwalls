@@ -65,3 +65,117 @@ class ShortcutWorld():
 
         return (sprime, reward)
 
+
+if __name__ == '__main__':
+
+    sc = ShortcutWorld()
+    
+    state = (0, 1)
+    nextState = (0, 2)
+    action = 0
+
+    s, r = sc.step(state, action, 0)
+
+    if s != nextState:
+        print 'Failed from state:',state,' and action:',action
+    else:
+        print 'Success from state:',state,' and action:',action
+
+    state = (1, 1)
+    nextState = (1, 1)
+    action = 0
+
+    s, r = sc.step(state, action, 0)
+
+    if s != nextState:
+        print 'Failed from state:',state,' and action:',action
+    else:
+        print 'Success from state:',state,' and action:',action
+
+    state = (8, 1)
+    nextState = (8, 1)
+    action = 0
+
+    s, r = sc.step(state, action, 0)
+
+    if s != nextState:
+        print 'Failed from state:',state,' and action:',action
+    else:
+        print 'Success from state:',state,' and action:',action
+
+    state = (0, 3)
+    nextState = (0, 2)
+    action = 2
+
+    s, r = sc.step(state, action, 0)
+
+    if s != nextState:
+        print 'Failed from state:',state,' and action:',action
+    else:
+        print 'Success from state:',state,' and action:',action
+
+    state = (0, 1)
+    nextState = (0, 2)
+    action = 0
+
+    s, r = sc.step(state, action, 4000)
+
+    if s != nextState:
+        print 'Failed from state:',state,' and action:',action
+    else:
+        print 'Success from state:',state,' and action:',action
+
+    state = (1, 1)
+    nextState = (1, 1)
+    action = 0
+
+    s, r = sc.step(state, action, 4000)
+
+    if s != nextState:
+        print 'Failed from state:',state,' and action:',action
+    else:
+        print 'Success from state:',state,' and action:',action
+
+    state = (8, 1)
+    nextState = (8, 2)
+    action = 0
+
+    s, r = sc.step(state, action, 4000)
+
+    if s != nextState:
+        print 'Failed from state:',state,' and action:',action
+    else:
+        print 'Success from state:',state,' and action:',action
+
+    state = (0, 3)
+    nextState = (0, 2)
+    action = 2
+
+    s, r = sc.step(state, action, 4000)
+
+    if s != nextState:
+        print 'Failed from state:',state,' and action:',action
+    else:
+        print 'Success from state:',state,' and action:',action
+
+    state = (0, 0)
+    nextState = (0, 0)
+    action = 2
+
+    s, r = sc.step(state, action, 4000)
+
+    if s != nextState:
+        print 'Failed from state:',state,' and action:',action
+    else:
+        print 'Success from state:',state,' and action:',action
+
+    state = (0, 0)
+    nextState = (0, 0)
+    action = 3
+
+    s, r = sc.step(state, action, 4000)
+
+    if s != nextState:
+        print 'Failed from state:',state,' and action:',action
+    else:
+        print 'Success from state:',state,' and action:',action
