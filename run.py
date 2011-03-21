@@ -7,7 +7,6 @@ from dyna import DynaQ
 # Experimental Framework 
 env = BlockingWorld()
 env = ShortcutWorld()
-alg = DynaQ()
 
 output = []
 
@@ -17,6 +16,7 @@ for j in range(50):
     
     cumrew = 0.0
     s = env.ss()
+    alg = DynaQ()
 
     output.append([])
 
