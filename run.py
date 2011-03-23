@@ -2,6 +2,7 @@
 
 from blocking import BlockingWorld
 from shortcut import ShortcutWorld
+from alternating import AlternatingWorld
 from dyna import DynaQ
 
 def eval(outfile, env, epsilon, init):
