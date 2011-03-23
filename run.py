@@ -44,7 +44,7 @@ def eval(outfile, env, epsilon, init):
 
 epsilons = [0, 0.001]
 aname = ['m','p']
-inits = [0, 0.9, 1, 2, 10]
+inits = [0]
 envs = [BlockingWorld(), ShortcutWorld()]
 ename = ['bl', 'sc']
 
