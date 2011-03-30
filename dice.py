@@ -45,9 +45,9 @@ class DiceLearner:
         keys = self.t.keys();
         
         temp = np.random.multinomial(1, values)
-        temp *= range(len(values))
+        i = np.argmax(temp)
 
-        return keys[sum(temp)]
+        return keys[i]
     
     def expectation(self):
         """Compute expectation of dice learner
