@@ -7,10 +7,11 @@ import random
 import math
 import numpy
 from dice import DiceLearner
+from memory import MemoryLearner
 
 class DynaQ:
-    def __init__(self, epsilon, qinit):
-        self.Q = collections.defaultdict(lambda: qinit)
+    def __init__(self, epsilon, k):
+        self.Q = collections.defaultdict(int)
         self.T = collections.defaultdict(DiceLearner)
         self.R = collections.defaultdict(DiceLearner)
         self.n = collections.defaultdict(self.getTime)
@@ -20,7 +21,7 @@ class DynaQ:
 
         self.beta = 0.5
         self.gamma = 0.9
-        self.k = 10
+        self.k = k
         self.epsilon = epsilon
 
     def getTime(self):
@@ -29,19 +30,8 @@ class DynaQ:
     def _qmax(self,state):
         q =  [ self.Q[(state, action)] for action in range(4) ] 
 
-        maxq = -100
-        actions = []
-        for i in range(4):
-            # exploration bonus but may not be needed see note in paper
-            tq = q[i]
-            if tq > maxq:
-                maxq = tq
-                actions = []
-                actions.append(i)
-            elif tq == maxq:
-                actions.append(i)
-            else:
-                pass
+        maxq = max(q)
+        actions = [ i for i in range(len(q)) if q[i] == maxq ] 
 
         action = random.choice(actions)
         value = q[action]
