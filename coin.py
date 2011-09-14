@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
     cl = CoinLearner(epsilon, delta)
     
-    for i in range(10):
+    for i in xrange(1000):
     
         r = random.random()
 
@@ -60,9 +60,9 @@ if __name__ == '__main__':
 
         cl.learn(bit)
 
-    # if abs(cl.predict() - 0.5) > epsilon:
-    #     print "Epsilon Failure"
-    # else:
-    #     print "Epsilon Success"
+    if abs(cl.predict() - 0.5) > epsilon:
+        print "Epsilon Failure"
+    else:
+        print "Epsilon Success"
 
     print cl.interval()
