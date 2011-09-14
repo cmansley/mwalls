@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
+import progressbar as pb
+
 from blocking import BlockingWorld
 from shortcut import ShortcutWorld
 from alternating import AlternatingWorld
 from dyna import DynaQ
 
-def eval(outfile, env, epsilon, init):
+def eval(outfile, env, epsilon, k):
 
     f = open(outfile, "w")
 
@@ -15,7 +17,7 @@ def eval(outfile, env, epsilon, init):
         
         cumrew = 0.0
         s = env.ss()
-        alg = DynaQ(epsilon, init)
+        alg = DynaQ(epsilon, k)
         
         output.append([])
 
@@ -44,12 +46,24 @@ def eval(outfile, env, epsilon, init):
 
 epsilons = [0, 0.001]
 aname = ['m','p']
-inits = [0]
-envs = [BlockingWorld(), ShortcutWorld()]
-ename = ['bl', 'sc']
+k = [10, 20, 50, 100]
+#envs = [BlockingWorld(), ShortcutWorld()]
+#ename = ['bl', 'sc']
+envs = [AlternatingWorld()]
+ename = ['al']
 
-for i in range(len(envs)):
-    for j in range(len(epsilons)):
-        for k in inits:
-            filename = 'dyna_' + aname[j] + '_' + str(k) + '_' + ename[i] + '.txt'
-            eval(filename, envs[i], epsilons[j], k)
+maxlen = len(envs)*len(epsilons)*len(k)
+widgets = [pb.Bar('>'), ' ', pb.ETA(), ' ', pb.ReverseBar('<')]
+pbar = pb.ProgressBar(widgets=widgets, maxval=maxlen).start()
+
+count = 0
+for x in range(len(envs)):
+    for y in range(len(epsilons)):
+        for z in k:
+            filename = 'dyna_' + aname[y] + '_' + str(z) + '_' + ename[x] + '.txt'
+            eval(filename, envs[x], epsilons[y], z)
+
+            count += 1
+            pbar.update(count)
+
+pbar.finish()
