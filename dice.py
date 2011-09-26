@@ -22,7 +22,8 @@ class DiceLearner:
         """Very similar in design to the KWIK dice-learner from Li 2010"""
         self.n += 1
 
-        alpha = 1/self.n
+        # alpha = 1/self.n
+        alpha = 0.5
 
         for key in self.t.keys():
             self.t[key] = (1-alpha)*self.t[key]

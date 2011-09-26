@@ -15,7 +15,7 @@ class AlternatingWorld():
         return self.start
 
     def len(self):
-        return 100000
+        return 80000
 
     def step(self, state, action, time):
         """Next state """
