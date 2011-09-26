@@ -31,7 +31,7 @@ class DynaQ:
         q =  [ self.Q[(state, action)] for action in range(4) ] 
 
         maxq = max(q)
-        actions = [ i for i in range(len(q)) if q[i] == maxq ] 
+        actions = [ i for i in range(4) if q[i] == maxq ] 
 
         action = random.choice(actions)
         value = q[action]
