@@ -54,12 +54,10 @@ class DynaQ:
         self.states.add(state)
 
         # reset/increment exploration bonus count
-        self.n[sa] = -1
-        for key in self.n.keys():
-            self.n[key] += 1 
+        self.n[sa] = self.time
 
         # update evaluation/policy functon
-        self.Q[sa] = self.Q[sa] + self.beta*(reward + self.epsilon * math.sqrt(self.n[sa]) + self.gamma*self.e(sprime) - self.Q[sa]) 
+        self.Q[sa] = self.Q[sa] + self.beta*(reward + self.epsilon * math.sqrt(self.time - self.n[sa]) + self.gamma*self.e(sprime) - self.Q[sa]) 
 
         # update model
         self.T[sa].learn(sprime)
@@ -82,7 +80,7 @@ class DynaQ:
                 rr = 0
 
             # update evaluation function
-            self.Q[rsa] = self.Q[rsa] + self.beta*(rr + self.epsilon * math.sqrt(self.n[rsa]) + self.gamma*self.e(rsp) - self.Q[rsa]) 
+            self.Q[rsa] = self.Q[rsa] + self.beta*(rr + self.epsilon * math.sqrt(self.time - self.n[rsa]) + self.gamma*self.e(rsp) - self.Q[rsa]) 
 
         
     def policy(self, state):
