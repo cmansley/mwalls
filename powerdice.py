@@ -17,8 +17,9 @@ class PowerDiceLearner:
     """
     def __init__(self):
         self.obs = []
+        self.obs.append((-1, -1))
         self.t = collections.defaultdict(int)
-        self.gamma = -0.3
+        self.gamma = -4
         self.n = 0
         
     def learn(self, obs, time):
