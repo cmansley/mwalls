@@ -13,8 +13,8 @@ from powerdice import PowerDiceLearner
 class PowerDynaQ:
     def __init__(self, k):
         self.Q = collections.defaultdict(int)
-        self.T = collections.defaultdict(PowerDiceLearner)
-        self.R = collections.defaultdict(PowerDiceLearner)
+        self.T = collections.defaultdict(self.factory)
+        self.R = collections.defaultdict(self.factory)
         self.n = collections.defaultdict(self.getTime)
         self.time = 0
         
@@ -23,6 +23,11 @@ class PowerDynaQ:
         self.beta = 0.5
         self.gamma = 0.9
         self.k = k
+        
+        self.alpha = -4
+
+    def factory(self):
+        return PowerDiceLearner(self.alpha)
 
     def getTime(self):
         return self.time

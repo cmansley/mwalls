@@ -15,19 +15,23 @@ class PowerDiceLearner:
     
     Define what is going on here.
     """
-    def __init__(self):
+    def __init__(self, gamma):
         self.obs = []
-        self.obs.append((-1, -1))
         self.t = collections.defaultdict(int)
-        self.gamma = -4
-        self.n = 0
-        
+        self.gamma = gamma
+
+        # add fictitious transition
+        self.obs.append((-1, -1))
+
     def learn(self, obs, time):
         """ """
         self.obs.append((time, obs))
 
-    def distribution(self):
-        """ Doesn't work"""
+    def distribution(self, time):
+        """Return probability distribution"""
+
+        self._compute(time)
+
         return self.t
 
     def predict(self, time):
@@ -39,6 +43,21 @@ class PowerDiceLearner:
         if not self.obs:
             return None
 
+        # compute transitions
+        self._compute(time)
+
+        # draw transition 
+        values = self.t.values();
+        keys = self.t.keys();
+        
+        temp = np.random.multinomial(1, values)
+        i = np.argmax(temp)
+
+        return keys[i]
+
+    def _compute(self, time):
+        """Compute transition probabilities"""
+
         # compute kernel weight average 
         self.t = collections.defaultdict(int)
         norm = 0
@@ -49,17 +68,8 @@ class PowerDiceLearner:
 
         for key in self.t.keys():
             self.t[key] = self.t[key] / norm
-            
 
-        # draw transition 
-        values = self.t.values();
-        keys = self.t.keys();
-        
-        temp = np.random.multinomial(1, values)
-        i = np.argmax(temp)
 
-        return keys[i]
-    
     def expectation(self):
         """Compute expectation of dice learner
         
@@ -75,23 +85,17 @@ class PowerDiceLearner:
 
 if __name__ == '__main__':
 
-    dl = PowerDiceLearner()
+    dl = PowerDiceLearner(-0.1)
     
-#    for i in range(1000):
-    
-#        r = random.randint(1,6)
+    dl.learn((3,4), 0)
+    dl.learn((6,7), 1)
 
-#        dl.learn(r, i)
+    print dl.predict(1000)
 
-    dl.learn(3, 0)
-    dl.learn(6, 999)
+    print dl.distribution(1000)
 
-    dl.predict(1000)
-    print dl.expectation()
-    print dl.distribution()
-
-    if abs(dl.expectation() - 3.5) > 0.3:
-        print "Expectation Failure"
-    else:
-        print "Expecation Success"
+#    if abs(dl.expectation() - 3.5) > 0.3:
+#        print "Expectation Failure"
+#    else:
+#        print "Expecation Success"
     
