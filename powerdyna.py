@@ -6,28 +6,37 @@ import collections
 import random
 import math
 import numpy
+import itertools
+
 from dice import DiceLearner
 from memory import MemoryLearner
 from powerdice import PowerDiceLearner
 
 class PowerDynaQ:
-    def __init__(self, k):
+    def __init__(self, k, alpha):
         self.Q = collections.defaultdict(int)
-        self.T = collections.defaultdict(self.factory)
+        self.T = collections.defaultdict(self.factory_fake)
         self.R = collections.defaultdict(self.factory)
         self.n = collections.defaultdict(self.getTime)
         self.time = 0
         
         self.states = set()
 
-        self.beta = 0.5
+        # environment parameter (optimization parameter)
         self.gamma = 0.9
+
+        # algorithm parameters
+        self.beta = 0.5
         self.k = k
         
-        self.alpha = -4
+        # dice learner parameter
+        self.alpha = alpha
+
+    def factory_fake(self):
+        return PowerDiceLearner(self.alpha, True)
 
     def factory(self):
-        return PowerDiceLearner(self.alpha)
+        return PowerDiceLearner(self.alpha, False)
 
     def getTime(self):
         return self.time
@@ -86,7 +95,7 @@ class PowerDynaQ:
 
             # rmax 
             if rsp == -1:
-                rmax = 0
+                rmax = 1
                 vmax = rmax / (1 - self.gamma)
                 rr = rmax
                 self.Q[rsa] = self.Q[rsa] + self.beta*(rr + self.gamma*vmax - self.Q[rsa]) 
@@ -94,6 +103,11 @@ class PowerDynaQ:
                 # update evaluation function
                 self.Q[rsa] = self.Q[rsa] + self.beta*(rr + self.gamma*self.e(rsp) - self.Q[rsa]) 
 
+    def vtable(self):
+        im = numpy.ones((9,6))
+        for state in itertools.product(range(9), range(6)):
+            im[state[0]][state[1]] = self.e(state)
+        return im
         
     def policy(self, state):
         """Take the maximum Q-valued action given the state"""

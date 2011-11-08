@@ -15,13 +15,14 @@ class PowerDiceLearner:
     
     Define what is going on here.
     """
-    def __init__(self, gamma):
+    def __init__(self, gamma, fake):
         self.obs = []
         self.t = collections.defaultdict(int)
         self.gamma = gamma
 
         # add fictitious transition
-        self.obs.append((-1, -1))
+        if fake:
+            self.obs.append((-1, -1))
 
     def learn(self, obs, time):
         """ """
@@ -85,14 +86,27 @@ class PowerDiceLearner:
 
 if __name__ == '__main__':
 
-    dl = PowerDiceLearner(-0.1)
+    dl = PowerDiceLearner(-2, False)
     
-    dl.learn((3,4), 0)
-    dl.learn((6,7), 1)
+    #dl.learn((3,4), 0)
+    #dl.learn((6,7), 1)
 
-    print dl.predict(1000)
+    #print dl.predict(1000)
 
-    print dl.distribution(1000)
+    #print dl.distribution(1000)
+    
+    dl.learn(-1, 0)
+    dl.learn(1, 10)
+    #dl.learn(0, 100)
+
+    #for i in range(2,100):
+    #    print dl.distribution(i)
+    
+    #dl.learn(1,100)
+
+    for i in range(101,500):
+        print dl.distribution(i)
+
 
 #    if abs(dl.expectation() - 3.5) > 0.3:
 #        print "Expectation Failure"
