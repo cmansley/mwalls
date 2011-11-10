@@ -21,7 +21,7 @@ class MemoryLearner:
         self.t[obs] = 1
 
     def distribution(self):
-        return t
+        return self.t
 
     def predict(self):
         """ """
