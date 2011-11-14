@@ -32,6 +32,10 @@ class PowerDynaQ:
         # dice learner parameter
         self.alpha = alpha
 
+    def reset(self):
+        """Competely reset algorthim"""
+        self.__init__(self.k, self.alpha)
+
     def factory_fake(self):
         return PowerDiceLearner(self.alpha, True)
 
@@ -107,6 +111,23 @@ class PowerDynaQ:
         im = numpy.ones((9,6))
         for state in itertools.product(range(9), range(6)):
             im[state[0]][state[1]] = self.e(state)
+        return im
+
+    def _maxvisit(self,state,time):
+        to =  [ time - self.n[(state, action)] for action in range(4) ] 
+
+        maxq = min(to)
+        actions = [ i for i in range(4) if to[i] == maxq ] 
+
+        action = random.choice(actions)
+        value = to[action]
+
+        return value
+
+    def visits(self, time):
+        im = numpy.ones((9,6))
+        for state in itertools.product(range(9), range(6)):
+            im[state[0]][state[1]] = self._maxvisit(state, time)
         return im
         
     def policy(self, state):

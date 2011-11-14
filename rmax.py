@@ -25,6 +25,10 @@ class Rmax:
         # environment parameter (optimization parameter)
         self.gamma = 0.9
 
+    def reset(self):
+        """Competely reset algorthim"""
+        self.__init__()
+
     def getTime(self):
         return self.time
 
@@ -94,9 +98,9 @@ class Rmax:
 
                 delta = max([delta, math.fabs(v-self.e(s))])
 
-    def policy(self, state, time):
+    def policy(self, state):
         """Take the maximum Q-valued action given the state"""
-        self.solve(time)
+        self.solve(self.time)
         value, action = self._qmax(state)
         return action    
 

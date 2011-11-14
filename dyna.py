@@ -24,6 +24,10 @@ class DynaQ:
         self.k = k
         self.epsilon = epsilon
 
+    def reset(self):
+        """Competely reset algorthim"""
+        self.__init__(self.epsilon, self.k)
+
     def getTime(self):
         return self.time
 
