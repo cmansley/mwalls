@@ -15,7 +15,7 @@ class MemoryLearner:
 
     def learn(self, obs):
         """Simply memorize the obs """
-
+        self.t = {}
         self.t[obs] = 1
 
     def distribution(self):
@@ -26,4 +26,5 @@ class MemoryLearner:
         return self.t.keys()[0]
     
     def expectation(self):
+        """ Expectation is an element"""
         return self.t.keys()[0]
