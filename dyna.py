@@ -10,7 +10,7 @@ from dice import DiceLearner
 from memory import MemoryLearner
 
 class DynaQ:
-    def __init__(self, epsilon, k):
+    def __init__(self, k, epsilon):
         self.Q = collections.defaultdict(int)
         self.T = collections.defaultdict(DiceLearner)
         self.R = collections.defaultdict(DiceLearner)
@@ -29,7 +29,7 @@ class DynaQ:
 
     def reset(self):
         """Competely reset algorthim"""
-        self.__init__(self.epsilon, self.k)
+        self.__init__(self.k, self.epsilon)
 
     def name(self):
         """Generate algorithm name with parameters"""
