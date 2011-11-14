@@ -22,8 +22,7 @@ class DiceLearner:
         """Very similar in design to the KWIK dice-learner from Li 2010"""
         self.n += 1
 
-        # alpha = 1/self.n
-        alpha = 0.5
+        alpha = 1/self.n
 
         for key in self.t.keys():
             self.t[key] = (1-alpha)*self.t[key]
@@ -31,7 +30,7 @@ class DiceLearner:
         self.t[obs] = self.t[obs] + alpha
 
     def distribution(self):
-        return t
+        return self.t
 
     def predict(self):
         """Generate a random pull from the multinomial
