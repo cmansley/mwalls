@@ -31,7 +31,7 @@ class Rmax:
 
     def reset(self):
         """Competely reset algorthim"""
-        self.__init__()
+        self.__init__(self.m, self.dynam)
 
     def name(self):
         """Generate algorithm name with parameters"""
