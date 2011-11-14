@@ -15,6 +15,10 @@ class ShortcutWorld():
     def ss(self):
         return self.start
 
+    def name(self):
+        """Report environment name"""
+        return 'sc'
+
     def len(self):
         return 6000
 

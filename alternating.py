@@ -14,8 +14,12 @@ class AlternatingWorld():
     def ss(self):
         return self.start
 
+    def name(self):
+        """Report environment name"""
+        return 'al'
+
     def len(self):
-        return 80000
+        return 8000
 
     def step(self, state, action, time):
         """Next state """

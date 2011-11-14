@@ -15,6 +15,10 @@ class BlockingWorld():
     def ss(self):
         return self.start
 
+    def name(self):
+        """Report environment name"""
+        return 'bl'
+
     def len(self):
         return 3000
 
