@@ -36,6 +36,10 @@ class PowerDynaQ:
         """Competely reset algorthim"""
         self.__init__(self.k, self.alpha)
 
+    def name(self):
+        """Generate algorithm name with parameters"""
+        return '_'.join(['pdyna', str(self.beta), str(self.k), str(self.alpha)])
+
     def factory_fake(self):
         return PowerDiceLearner(self.alpha, True)
 

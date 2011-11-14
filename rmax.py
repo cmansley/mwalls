@@ -13,7 +13,7 @@ from memory import MemoryLearner
 from powerdice import PowerDiceLearner
 
 class Rmax:
-    def __init__(self):
+    def __init__(self, m, dynam):
         self.Q = collections.defaultdict(int)
         self.T = collections.defaultdict(MemoryLearner)
         self.R = collections.defaultdict(MemoryLearner)
@@ -22,12 +22,20 @@ class Rmax:
         
         self.states = set()
 
+        # algorithm parameters
+        self.m = m
+        self.dynam = dynam
+
         # environment parameter (optimization parameter)
         self.gamma = 0.9
 
     def reset(self):
         """Competely reset algorthim"""
         self.__init__()
+
+    def name(self):
+        """Generate algorithm name with parameters"""
+        return '_'.join(['rmax', str(self.m), str(self.dynam)])
 
     def getTime(self):
         return self.time
@@ -81,14 +89,14 @@ class Rmax:
                 v = self.e(s)
                 for a in range(4):
                     sa = (s, a)
-                    #if self.T[sa].n < 3 or (time-self.n[sa]) > 1500:
+                    #if self.T[sa].n < self.m or (time-self.n[sa]) > self.dynam:
                     if sa not in self.T:
                         self.Q[sa] = rmax + self.gamma*vmax
                     else:
                         T = self.T[sa].distribution()
                         if not T:
                             self.Q[sa] = rmax + self.gamma*vmax
-                        elif sa not in self.n or (time-self.n[sa]) > 1000:
+                        elif sa not in self.n or (time-self.n[sa]) > self.dynam:
                             self.Q[sa] = rmax + self.gamma*vmax
                         else:
                             values = [T[sp]*self.e(sp) for sp in T.keys()]

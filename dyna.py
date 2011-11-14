@@ -19,14 +19,21 @@ class DynaQ:
         
         self.states = set()
 
+        # algorithm parameters
         self.beta = 0.5
-        self.gamma = 0.9
         self.k = k
         self.epsilon = epsilon
+
+        # environmental parameters
+        self.gamma = 0.9
 
     def reset(self):
         """Competely reset algorthim"""
         self.__init__(self.epsilon, self.k)
+
+    def name(self):
+        """Generate algorithm name with parameters"""
+        return '_'.join(['dyna', str(self.beta), str(self.k), str(self.epsilon)])
 
     def getTime(self):
         return self.time
