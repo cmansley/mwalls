@@ -11,20 +11,19 @@ class MemoryLearner:
     Define what is going on here.
     """
     def __init__(self):
-        self.t = {}
+        self.obs = None
 
     def learn(self, obs):
         """Simply memorize the obs """
-        self.t = {}
-        self.t[obs] = 1
+        self.obs = obs
 
     def distribution(self):
-        return self.t
+        return {self.obs : 1}
 
     def predict(self):
         """ """
-        return self.t.keys()[0]
+        return self.obs
     
     def expectation(self):
         """ Expectation is an element"""
-        return self.t.keys()[0]
+        return self.obs
