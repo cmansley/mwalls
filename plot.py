@@ -1,3 +1,5 @@
+from __future__ import division
+
 import sys
 import re
 import math
@@ -15,6 +17,7 @@ def stats(data):
     return (m, u, l)
 
 fig, ax = plt.subplots(1)
+fig2, ax2 = plt.subplots(1)
 
 # for each file on the command line
 for arg in sys.argv[1:]:
@@ -43,7 +46,14 @@ for arg in sys.argv[1:]:
 
         ax.plot(n, mean, label=arg)
         #ax.fill_between(n, up, low, alpha=0.5)
+        
+        s = 50
+        slope = [(mean[i+s] - mean[i])/s for i in range(len(mean)-s)]
+        ax2.plot(n[:-s], slope, label=arg)
 
 ax.legend(loc='upper left')
 fig.savefig('output.png')
+
+ax2.legend(loc='upper left')
+fig2.savefig('slope.png')
 
