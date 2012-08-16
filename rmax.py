@@ -78,6 +78,7 @@ class Rmax:
         """Solve model using value iteration"""
 
         rmax = 1
+        rmin = 0
         vmax = 1/(1-self.gamma)
 
         theta = 0.1
@@ -99,7 +100,10 @@ class Rmax:
                         elif sa not in self.n or (time-self.n[sa]) > self.dynam:
                             self.Q[sa] = rmax + self.gamma*vmax
                         else:
-                            values = [T[sp]*self.e(sp) for sp in T.keys()]
+                            dt = time - self.n[sa]
+                            beta = ((1 - 0)/(self.dynam*self.dynam - 0)) * dt*dt
+                            values = [(1-beta)*T[sp]*self.e(sp) for sp in T.keys()]
+                            values.append(vmax*beta)
                             self.Q[sa] = self.R[sa].expectation() + self.gamma*sum(values)
 
 
