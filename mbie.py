@@ -56,9 +56,11 @@ class MBIE:
         return value
 
     def dot(T,V):
+        """Compute dot product of two lists of numbers"""
         return sum([T[i]*V[i] for i in range(len(V))])
 
     def constrain_max(T, V, eps):
+        """Compute maximum value of a distribution T given some constraints"""
         if 1-T[V.index(max(V))] <= eps/2:
             T_temp = [0 for i in T]
             T_temp[V.index(max(V))] = 1
@@ -69,7 +71,7 @@ class MBIE:
 
             weight = eps/2.0
             T_temp[s_max] += weight
-            v_sort = sorted([(v,i) for i,v in  enumerate(V)])
+            v_sort = sorted([(v,i) for i,v in enumerate(V)])
             for v,i in v_sort:
                 weight -= T_temp[i]
                 T_temp[i] = 0.0
@@ -78,7 +80,6 @@ class MBIE:
                     break
             
         return (self.dot(T_temp,V), T_temp)
-
 
     def learn(self, state, action, reward, sprime):
         """Add real experience to model, then simulate experience with model"""
@@ -123,11 +124,21 @@ class MBIE:
                         elif sa not in self.n or (time-self.n[sa]) > self.dynam:
                             self.Q[sa] = rmax + self.gamma*vmax
                         else:
-                            V = [self.e(sp) for sp in T.keys()]
-                            T.append(0.0); # doesnt work
-                            V.append(vmax)
-                            self.Q[sa] = self.R[sa].expectation() + self.gamma*self.constrain_max(T, V, eps)
+                            Vcop = [self.e(sp) for sp in T.keys()]
+                            Tcop = [T[sp] for sp in T.keys()]
+                            # add smax state
+                            Tcop.append(0.0)
+                            Vcop.append(vmax)
+                            # compute optimal bounds
+                            Rupper = math.sqrt(math.log(2/self.delta)*rmax*rmax / 2*self.R[sa].n)
+                            # log_b(x) = log_k(x) / log_k(b)
+                            # log_e(2^S - 2) = log_2(2^S - 2) / log_2(e)
+                            # S*log_2(2)/log_2(e)
+                            S = 400
+                            eps = math.sqrt( 2*(S/math.log(math.e,2) - math.log(self.delta))/self.T[sa].n )
 
+                            # compute backup with constraints
+                            self.Q[sa] = self.R[sa].expectation() + Rupper + self.gamma*self.constrain_max(Tcop, Vcop, eps)
 
                 delta = max([delta, math.fabs(v-self.e(s))])
 
