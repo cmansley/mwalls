@@ -5,9 +5,13 @@ import matplotlib.cm as cm
 
 import progressbar as pb
 
+# worlds 
 from blocking import BlockingWorld
 from shortcut import ShortcutWorld
 from alternating import AlternatingWorld
+from geometricworld import GeometricWorld
+
+# algorithms
 from dyna import DynaQ
 from powerdyna import PowerDynaQ
 from rmax import Rmax
@@ -75,37 +79,42 @@ def eval(outfile, alg, env):
         f.write('\n')
     f.close()
 
+def main():
+    # params = [0, 0.001]
+    # aname = ['m','p']
 
-# params = [0, 0.001]
-# aname = ['m','p']
+    # params = [0.001]
+    # params = [-23] 
+    params = [9000, 10000]
 
-params = [0.001]
-# params = [-23] 
+    # backups = [10, 20, 50, 100]
+    # backups = [10, 20]
+    backups = [100]
 
-#backups = [10, 20, 50, 100]
-#backups = [10, 20]
-backups = [10, 20]
+    # envs = [BlockingWorld(), ShortcutWorld()]
+    # envs = [AlternatingWorld()]
+    # envs = [ShortcutWorld()]
+    envs = [GeometricWorld()]
 
-#envs = [BlockingWorld(), ShortcutWorld()]
-#envs = [AlternatingWorld()]
-envs = [ShortcutWorld()]
+    maxlen = len(envs)*len(backups)*len(params)
+    widgets = [pb.Bar('>'), ' ', pb.ETA(), ' ', pb.ReverseBar('<')]
+    pbar = pb.ProgressBar(widgets=widgets, maxval=maxlen).start()
 
-maxlen = len(envs)*len(backups)*len(params)
-widgets = [pb.Bar('>'), ' ', pb.ETA(), ' ', pb.ReverseBar('<')]
-pbar = pb.ProgressBar(widgets=widgets, maxval=maxlen).start()
+    count = 0
+    for env in envs:
+        for k in backups:
+            for param in params:
+                # alg = PowerDynaQ(k, param)
+                # alg = DynaQ(k, param)
+                alg = Rmax(1, param)
 
-count = 0
-for env in envs:
-    for k in backups:
-        for param in params:
-            #alg = PowerDynaQ(k, param)
-            alg = DynaQ(k, param)
-            #alg = Rmax(3, 1000)
+                filename = alg.name() + '_' + env.name() + '.txt'
+                eval(filename, alg, env)
 
-            filename = alg.name() + '_' + env.name() + '.txt'
-            eval(filename, alg, env)
+                count += 1
+                pbar.update(count)
 
-            count += 1
-            pbar.update(count)
+    pbar.finish()
 
-pbar.finish()
+if __name__ == '__main__':
+    main()
