@@ -6,15 +6,15 @@ import matplotlib.cm as cm
 import progressbar as pb
 
 # worlds 
-from blocking import BlockingWorld
-from shortcut import ShortcutWorld
-from alternating import AlternatingWorld
-from geometricworld import GeometricWorld
+from environments.blocking import BlockingWorld
+from environments.shortcut import ShortcutWorld
+from environments.alternating import AlternatingWorld
+from environments.geometricworld import GeometricWorld
 
 # algorithms
-from dyna import DynaQ
-from powerdyna import PowerDynaQ
-from rmax import Rmax
+from algorithms.dyna import DynaQ
+from algorithms.powerdyna import PowerDynaQ
+from algorithms.rmax import Rmax
 
 num_avg = 10
 
