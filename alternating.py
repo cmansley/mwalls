@@ -19,7 +19,7 @@ class AlternatingWorld():
         return 'al'
 
     def len(self):
-        return 8000
+        return 12000
 
     def step(self, state, action, time):
         """Next state """
@@ -40,22 +40,23 @@ class AlternatingWorld():
 
         # barrier
         # from sutton!!!
-        if time % 4000 < 2000 :
+        if time % 6000 < 3000 :
             if state[1] == 1 and action == 0:
-                if state[0] != 8:
+                if state[0] != 0:
                     y = state[1]
 
             if state[1] == 3 and action == 2:
-                if state[0] != 8:
+                if state[0] != 0:
                     y = state[1]
         else:
             if state[1] == 1 and action == 0:
-                if state[0] != 0:
+                if state[0] != 0 and state[0] != 8:
                     y = state[1]
 
             if state[1] == 3 and action == 2:
-                if state[0] != 0:
+                if state[0] != 0 and state[0] != 8:
                     y = state[1]
+
 
         # Wall logic
         if x > self.size[0] or x < 0 or y > self.size[1] or y < 0:
