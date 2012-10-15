@@ -80,39 +80,42 @@ def eval(outfile, alg, env):
     f.close()
 
 def main():
-    # params = [0, 0.001]
+    # create algorithms
+    algorithms = []
+
+    backups = [10, 20, 50, 100]
     # aname = ['m','p']
+    params = [0, 0.001]
+    for k in backups:
+        for param in params:
+            algorithms.append(DynaQ(k, param))
 
-    # params = [0.001]
-    # params = [-23] 
-    params = [9000, 10000]
+    params = [1000, 3000, 5000, 7000]
+    for param in params:
+        alg = Rmax(1, param)
 
-    # backups = [10, 20, 50, 100]
-    # backups = [10, 20]
-    backups = [100]
+    for k in backups:
+        for param in params:
+            algorithms.appendPowerDynaQ(k, param))
 
+    # create environments
     # envs = [BlockingWorld(), ShortcutWorld()]
     # envs = [AlternatingWorld()]
-    # envs = [ShortcutWorld()]
-    envs = [GeometricWorld()]
+    envs = [ShortcutWorld()]
+    # envs = [GeometricWorld()]
 
-    maxlen = len(envs)*len(backups)*len(params)
+    maxlen = len(envs)*len(algorithms)
     widgets = [pb.Bar('>'), ' ', pb.ETA(), ' ', pb.ReverseBar('<')]
     pbar = pb.ProgressBar(widgets=widgets, maxval=maxlen).start()
 
     count = 0
     for env in envs:
-        for k in backups:
-            for param in params:
-                # alg = PowerDynaQ(k, param)
-                # alg = DynaQ(k, param)
-                alg = Rmax(1, param)
+        for alg in algorithms:
+            filename = alg.name() + '_' + env.name() + '.txt'
+            eval(filename, alg, env)
 
-                filename = alg.name() + '_' + env.name() + '.txt'
-                eval(filename, alg, env)
-
-                count += 1
-                pbar.update(count)
+            count += 1
+            pbar.update(count)
 
     pbar.finish()
 
