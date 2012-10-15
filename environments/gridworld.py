@@ -1,9 +1,12 @@
+from params import Params
+import random
+
 # Grid World Environment
 class GridWorld():
     """
     Parameterized environment supporting several types
     """
-    def __init__(self):
+    def __init__(self, params):
         """Constructor for grid world"""
         
         # environment params
@@ -15,26 +18,26 @@ class GridWorld():
         # start in MDP 2
         self.toggle = False
 
+        # store params
+        self.params = params
+
     def ss(self):
         return self.start
 
     def name(self):
         """Report environment name"""
-        #return 'bl'
-        pass
+        return params.name()
 
     def len(self):
-        return 3000
+        return params.length
 
     def decide(self, time):
-        # blocking
-        # self.toggle = time < 1000
-        # alternating
-        # self.toggle = time % 6000 < 3000
-        # geometric
-        # flip = random.random() 
-        # if flip < 0.001:
-        #    self.toggle = not self.toggle
+        if params.probability > 0:
+            flip = random.random() 
+            if flip < 0.001:
+                self.toggle = not self.toggle
+        else:
+            self.toggle = time % params.transition < params.transition
 
     def step(self, state, action, time):
         """Next state """
