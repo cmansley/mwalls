@@ -44,26 +44,6 @@ def eval(outfile, alg, env):
             # pass next state to learner
             alg.learn(s,a,r,sp)
 
-            if i < 5000 and False:
-                if i % 100 == 0:
-                    im = alg.vtable()
-                    fig = plt.figure()
-                    ax = fig.add_subplot(111)
-                    p = ax.imshow(im.transpose(), cmap=cm.jet, interpolation='nearest', vmin=0, vmax=10)
-                    plt.colorbar(p)
-                    fig.savefig(str(i)+'.png')
-                    print str(i)
-
-            if i < 5000 and False:
-                if i % 100 == 0:
-                    im = alg.visits(i)
-                    fig = plt.figure()
-                    ax = fig.add_subplot(111)
-                    p = ax.imshow(im.transpose(), cmap=cm.jet, interpolation='nearest')
-                    plt.colorbar(p)
-                    fig.savefig(str(i)+'.png')
-                    print str(i)
-
             # score environment
             cumrew += r
             output[j].append(cumrew)
@@ -86,17 +66,29 @@ def main():
     backups = [10, 20, 50, 100]
     # aname = ['m','p']
     params = [0, 0.001]
-    for k in backups:
-        for param in params:
-            algorithms.append(DynaQ(k, param))
+    # for k in backups:
+    #     for param in params:
+    #         algorithms.append(DynaQ(k, param))
 
-    params = [1000, 3000, 5000, 7000]
+    # fixed
+    params = [500, 1000, 2000, 4000, 8000]
     for param in params:
-        alg = Rmax(1, param)
+        algorithms.append(Rmax(1, param, 1, 0))
 
-    for k in backups:
-        for param in params:
-            algorithms.appendPowerDynaQ(k, param))
+    # const
+    params = [500, 1000, 2000, 4000, 8000]
+    for param in params:
+        algorithms.append(Rmax(1, param, 1, 10))
+
+    # exponential
+    params = [500, 1000, 2000, 4000, 8000]
+    for param in params:
+        algorithms.append(Rmax(1, param, 2, 0))
+
+
+    # for k in backups:
+    #     for param in params:
+    #         algorithms.appendPowerDynaQ(k, param))
 
     # create environments
     # envs = [BlockingWorld(), ShortcutWorld()]

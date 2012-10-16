@@ -13,11 +13,15 @@ from memory import MemoryLearner
 from powerdice import PowerDiceLearner
 
 class Rmax:
-    def __init__(self, m, dynam):
+    def __init__(self, m, dynam, alpha, beta):
         self.Q = collections.defaultdict(int)
         self.T = collections.defaultdict(MemoryLearner)
         self.R = collections.defaultdict(MemoryLearner)
+        self.T_old = collections.defaultdict(MemoryLearner)
+        # future work
+        # self.R_old = collections.defaultdict(MemoryLearner)
         self.n = collections.defaultdict(self.getTime)
+        self.interval = collections.defaultdict(dynam)
         self.time = 0
         
         self.states = set()
@@ -25,17 +29,19 @@ class Rmax:
         # algorithm parameters
         self.m = m
         self.dynam = dynam
+        self.alpha = alpha
+        self.beta = beta
 
         # environment parameter (optimization parameter)
         self.gamma = 0.9
 
     def reset(self):
         """Competely reset algorthim"""
-        self.__init__(self.m, self.dynam)
+        self.__init__(self.m, self.dynam, self.alpha, self.beta)
 
     def name(self):
         """Generate algorithm name with parameters"""
-        return '_'.join(['rmax', str(self.m), str(self.dynam)])
+        return '_'.join(['rmax', str(self.m), str(self.dynam), str(self.alpha), str(self.beta)])
 
     def getTime(self):
         return self.time
@@ -90,20 +96,32 @@ class Rmax:
                 v = self.e(s)
                 for a in range(4):
                     sa = (s, a)
-                    #if self.T[sa].n < self.m or (time-self.n[sa]) > self.dynam:
                     if sa not in self.T:
                         self.Q[sa] = rmax + self.gamma*vmax
                     else:
                         T = self.T[sa].distribution()
                         if not T:
                             self.Q[sa] = rmax + self.gamma*vmax
-                        elif sa not in self.n or (time-self.n[sa]) > self.dynam:
+                        elif (time-self.n[sa]) > self.interval[sa]:                            
+                            # compare old transition and this transition
+                            if sa in self.T_old:
+                                if self.T_old[sa].predict() == self.T[sa].predict():
+                                    # optional algorithm
+                                    self.interval[sa] = self.alpha*self.interval[sa] + self.beta
+
+                            # store old pair
+                            self.T_old[sa] = self.T[sa]
+
+                            # reset state action pair
+                            del self.T[sa]
+                            del self.R[sa]
+                            self.n[sa] = time
+
+                            # do optimistic backup
                             self.Q[sa] = rmax + self.gamma*vmax
                         else:
-                            dt = time - self.n[sa]
-                            beta = ((1 - 0)/(self.dynam*self.dynam - 0)) * dt*dt
-                            values = [(1-beta)*T[sp]*self.e(sp) for sp in T.keys()]
-                            values.append(vmax*beta)
+                            vmax = self.e(sp)
+                            values = [T[sp]*vmax for sp in T.keys()]
                             self.Q[sa] = self.R[sa].expectation() + self.gamma*sum(values)
 
 
