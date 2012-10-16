@@ -71,17 +71,17 @@ def main():
     #         algorithms.append(DynaQ(k, param))
 
     # fixed
-    params = [500, 1000, 2000, 4000, 8000]
+    params = [20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240]
     for param in params:
         algorithms.append(Rmax(1, param, 1, 0))
 
     # const
-    params = [500, 1000, 2000, 4000, 8000]
+    params = [20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240]
     for param in params:
         algorithms.append(Rmax(1, param, 1, 10))
 
     # exponential
-    params = [500, 1000, 2000, 4000, 8000]
+    params = [20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240]
     for param in params:
         algorithms.append(Rmax(1, param, 2, 0))
 
@@ -92,8 +92,8 @@ def main():
 
     # create environments
     # envs = [BlockingWorld(), ShortcutWorld()]
-    # envs = [AlternatingWorld()]
-    envs = [ShortcutWorld()]
+    envs = [AlternatingWorld()]
+    # envs = [ShortcutWorld()]
     # envs = [GeometricWorld()]
 
     maxlen = len(envs)*len(algorithms)
