@@ -21,7 +21,7 @@ class Rmax:
         # future work
         # self.R_old = collections.defaultdict(MemoryLearner)
         self.n = collections.defaultdict(self.getTime)
-        self.interval = collections.defaultdict(dynam)
+        self.interval = collections.defaultdict(lambda: dynam)
         self.time = 0
         
         self.states = set()
@@ -120,8 +120,7 @@ class Rmax:
                             # do optimistic backup
                             self.Q[sa] = rmax + self.gamma*vmax
                         else:
-                            vmax = self.e(sp)
-                            values = [T[sp]*vmax for sp in T.keys()]
+                            values = [T[sp]*self.e(sp) for sp in T.keys()]
                             self.Q[sa] = self.R[sa].expectation() + self.gamma*sum(values)
 
 
