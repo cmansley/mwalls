@@ -115,7 +115,6 @@ class Rmax:
                             # reset state action pair
                             del self.T[sa]
                             del self.R[sa]
-                            self.n[sa] = time
 
                             # do optimistic backup
                             self.Q[sa] = rmax + self.gamma*vmax
