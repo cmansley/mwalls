@@ -51,6 +51,9 @@ for arg in sys.argv[1:]:
         slope = [(mean[i+s] - mean[i])/s for i in range(len(mean)-s)]
         ax2.plot(n[:-s], slope, label=arg)
 
+ax.set_xlabel('Time/Experience')
+ax.set_ylabel('Cumulative Reward')
+ax.set_ybound(lower=0, upper=800)
 ax.legend(loc='upper left')
 fig.savefig('output.png')
 
