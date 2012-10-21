@@ -12,9 +12,9 @@ from memory import MemoryLearner
 class DynaQ:
     def __init__(self, k, epsilon):
         self.Q = collections.defaultdict(int)
-        self.T = collections.defaultdict(DiceLearner)
-        self.R = collections.defaultdict(DiceLearner)
-        self.n = collections.defaultdict(self.getTime)
+        self.T = collections.defaultdict(MemoryLearner)
+        self.R = collections.defaultdict(MemoryLearner)
+        self.n = collections.defaultdict(int)
         self.time = 0
         
         self.states = set()
