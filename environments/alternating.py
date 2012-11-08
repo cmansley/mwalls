@@ -3,13 +3,18 @@ class AlternatingWorld():
     """Cool description
     
     """
+    UP = 0
+    LEFT = 1
+    DOWN = 2
+    RIGHT = 3
+
     def __init__(self):
         """ Constructor for grid world """
         
         # environment params
         self.size = (8, 5)  # max grid location
         self.goal = (8, 5)
-        self.start = (3, 0)
+        self.start = (4, 0)
 
     def ss(self):
         return self.start
@@ -27,13 +32,13 @@ class AlternatingWorld():
         x,y = state
 
         # Action logic
-        if action == 0:
+        if action == AlternatingWorld.UP:
             y += 1
-        elif action == 1:
+        elif action == AlternatingWorld.LEFT:
             x += 1
-        elif action == 2:
+        elif action == AlternatingWorld.DOWN:
             y -= 1
-        elif action == 3:
+        elif action == AlternatingWorld.RIGHT:
             x -= 1
         else:
             raise Exception("Hello")
@@ -41,19 +46,19 @@ class AlternatingWorld():
         # barrier
         # from sutton!!!
         if time % 6000 < 3000 :
-            if state[1] == 1 and action == 0:
+            if state[1] == 1 and action == AlternatingWorld.UP:
                 if state[0] != 0:
                     y = state[1]
 
-            if state[1] == 3 and action == 2:
+            if state[1] == 2 and action == AlternatingWorld.DOWN:
                 if state[0] != 0:
                     y = state[1]
         else:
-            if state[1] == 1 and action == 0:
+            if state[1] == 1 and action == AlternatingWorld.UP:
                 if state[0] != 0 and state[0] != 8:
                     y = state[1]
 
-            if state[1] == 3 and action == 2:
+            if state[1] == 2 and action == AlternatingWorld.DOWN:
                 if state[0] != 0 and state[0] != 8:
                     y = state[1]
 
