@@ -20,8 +20,8 @@ class Rmax:
         self.T_old = collections.defaultdict(MemoryLearner)
         # future work
         # self.R_old = collections.defaultdict(MemoryLearner)
-        self.n = collections.defaultdict(self.getTime)
-        self.interval = collections.defaultdict(lambda: dynam)
+        self.n = collections.defaultdict(int)
+        self.interval = collections.defaultdict(lambda: random.uniform(0, dynam))
         self.time = 0
         
         self.states = set()
@@ -34,6 +34,9 @@ class Rmax:
 
         # environment parameter (optimization parameter)
         self.gamma = 0.9
+
+        # explictly seed with system time
+        random.seed()
 
     def reset(self):
         """Competely reset algorthim"""

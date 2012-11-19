@@ -27,6 +27,9 @@ class DynaQ:
         # environmental parameters
         self.gamma = 0.9
 
+        # explictly seed with system time
+        random.seed()
+
     def reset(self):
         """Competely reset algorthim"""
         self.__init__(self.k, self.epsilon)
