@@ -56,9 +56,8 @@ class Rmax:
         actions = [ i for i in range(4) if q[i] == maxq ] 
 
         action = random.choice(actions)
-        value = q[action]
 
-        return (value, action)
+        return (maxq, action)
 
     def e(self, state):
         """Take the max of the Q-values given this state by iterating over actions"""
@@ -122,8 +121,8 @@ class Rmax:
                             # do optimistic backup
                             self.Q[sa] = rmax + self.gamma*vmax
                         else:
-                            values = [T[sp]*self.e(sp) for sp in T.keys()]
-                            self.Q[sa] = self.R[sa].expectation() + self.gamma*sum(values)
+                            vp = sum([T[sp]*self.e(sp) for sp in T.keys()])
+                            self.Q[sa] = self.R[sa].expectation() + self.gamma*vp
 
 
 
