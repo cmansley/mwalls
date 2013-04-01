@@ -4,6 +4,9 @@ import sys
 import re
 import math
 
+import matplotlib
+matplotlib.use('Agg')
+
 import matplotlib.pyplot as plt
 
 def stats(data):
