@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import smtplib
+
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
@@ -15,6 +17,22 @@ from environments.geometricworld import GeometricWorld
 from algorithms.dyna import DynaQ
 from algorithms.powerdyna import PowerDynaQ
 from algorithms.rmax import Rmax
+
+def send_mail():
+    subject = "RL Job Finished"
+    to = "chris@chrismansley.com"
+    frm = "cmansley@cirrus.chrismansley.com"
+    text = "This job has finished"
+    body = "\r\n".join((
+        "From: %s" % frm,
+        "To: %s" % to,
+        "Subject: %s" % subject,
+        "",
+        text))
+
+    server = smtplib.SMTP('localhost')
+    server.sendmail(frm, [to], body)
+    server.quit()
 
 num_avg = 10
 
@@ -110,6 +128,8 @@ def main():
             pbar.update(count)
 
     pbar.finish()
+
+    send_mail()
 
 if __name__ == '__main__':
     main()
