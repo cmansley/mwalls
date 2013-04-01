@@ -15,6 +15,7 @@ from powerdice import PowerDiceLearner
 class Rmax:
     def __init__(self, m, dynam, alpha, beta):
         self.Q = collections.defaultdict(int)
+        self.V = collections.defaultdict(int)
         self.T = collections.defaultdict(MemoryLearner)
         self.R = collections.defaultdict(MemoryLearner)
         self.T_old = collections.defaultdict(MemoryLearner)
@@ -61,8 +62,8 @@ class Rmax:
 
     def e(self, state):
         """Take the max of the Q-values given this state by iterating over actions"""
-        value, action = self._qmax(state)
-        return value
+        # value, action = self._qmax(state)
+        return self.V[state] #value
 
     def learn(self, state, action, reward, sprime):
         """Add real experience to model, then simulate experience with model"""
@@ -82,12 +83,46 @@ class Rmax:
         self.T[sa].learn(sprime)
         self.R[sa].learn(reward)
 
-    def solve(self,time):
-        """Solve model using value iteration"""
+    def backup(self, s, a , time):
 
         rmax = 1
         rmin = 0
         vmax = 1/(1-self.gamma)
+
+        sa = (s, a)
+        if sa not in self.T:
+            self.Q[sa] = rmax + self.gamma*vmax
+            self.V[s] = vmax
+        else:
+            T = self.T[sa].distribution()
+            if not T:
+                self.Q[sa] = rmax + self.gamma*vmax
+                self.V[s] = vmax
+            elif (time-self.n[sa]) > self.interval[sa]:                            
+                # compare old transition and this transition
+                if sa in self.T_old:
+                    if self.T_old[sa].predict() == self.T[sa].predict():
+                        # optional algorithm
+                        self.interval[sa] = self.alpha*self.interval[sa] + self.beta
+
+                        # store old pair
+                        self.T_old[sa] = self.T[sa]
+
+                        # reset state action pair
+                        del self.T[sa]
+                        del self.R[sa]
+
+                        # do optimistic backup
+                        self.Q[sa] = rmax + self.gamma*vmax
+                        self.V[s] = vmax
+            else:
+                vp = sum([T[sp]*self.V[sp] for sp in T.keys()])
+                self.Q[sa] = self.R[sa].expectation() + self.gamma*vp
+                self.V[s] = max(self.Q[sa], self.V[s])
+
+
+    def solve(self,time):
+        """Solve model using value iteration"""
 
         theta = 0.1
 
@@ -95,38 +130,11 @@ class Rmax:
         while delta > theta:
             delta = 0
             for s in self.states:
-                v = self.e(s)
+                v = self.V[s]
                 for a in range(4):
-                    sa = (s, a)
-                    if sa not in self.T:
-                        self.Q[sa] = rmax + self.gamma*vmax
-                    else:
-                        T = self.T[sa].distribution()
-                        if not T:
-                            self.Q[sa] = rmax + self.gamma*vmax
-                        elif (time-self.n[sa]) > self.interval[sa]:                            
-                            # compare old transition and this transition
-                            if sa in self.T_old:
-                                if self.T_old[sa].predict() == self.T[sa].predict():
-                                    # optional algorithm
-                                    self.interval[sa] = self.alpha*self.interval[sa] + self.beta
+                    self.backup(s,a,time)
 
-                            # store old pair
-                            self.T_old[sa] = self.T[sa]
-
-                            # reset state action pair
-                            del self.T[sa]
-                            del self.R[sa]
-
-                            # do optimistic backup
-                            self.Q[sa] = rmax + self.gamma*vmax
-                        else:
-                            vp = sum([T[sp]*self.e(sp) for sp in T.keys()])
-                            self.Q[sa] = self.R[sa].expectation() + self.gamma*vp
-
-
-
-                delta = max([delta, math.fabs(v-self.e(s))])
+                delta = max([delta, math.fabs(v-self.V[s])])
 
     def policy(self, state):
         """Take the maximum Q-valued action given the state"""
