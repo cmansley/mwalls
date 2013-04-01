@@ -63,27 +63,27 @@ def main():
     # create algorithms
     algorithms = []
 
-    backups = [10, 20, 50, 100]
+    backups = [10]
     # aname = ['m','p']
     params = [0, 0.001]
-    # for k in backups:
-    #     for param in params:
-    #         algorithms.append(DynaQ(k, param))
+    for k in backups:
+        for param in params:
+            algorithms.append(DynaQ(k, param))
 
-    # fixed
-    params = [20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240]
-    for param in params:
-        algorithms.append(Rmax(1, param, 1, 0))
+    # rmax intervals
+    params = [160, 320, 640, 1280, 2560, 5120, 10240]
 
     # const
-    params = [20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240]
-    for param in params:
-        algorithms.append(Rmax(1, param, 1, 10))
+    constants = [50, 100, 200, 300, 400, 500]
+    for k in constants:
+        for param in params:
+            algorithms.append(Rmax(1, param, 1, k))
 
-    # exponential
-    params = [20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240]
-    for param in params:
-        algorithms.append(Rmax(1, param, 2, 0))
+    # exponential (includes constant/fixed)
+    constants = [1, 1.5, 2.5, 3]
+    for k in constants:
+        for param in params:
+            algorithms.append(Rmax(1, param, k, 0))
 
 
     # for k in backups:
